@@ -1,0 +1,43 @@
+/* Base styles */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #000000;
+    color: #ffffff;
+    user-select: none;
+    -webkit-user-select: none;
+    overflow: hidden;
+}
+
+/* Monospaced numeric figures so the clock numbers never jitter or shift */
+.tabular-nums {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Clock typography scaling */
+#clock-display {
+    font-size: clamp(4rem, 27vw, 36vh);
+    line-height: 0.85;
+}
+
+/* Smooth drawer animation */
+.drawer-transition {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+/* Subtle urgency pulsing for the final 5 seconds */
+@keyframes pulse-red {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+        color: #ffffff;
+    }
+    50% {
+        opacity: 0.85;
+        transform: scale(0.98);
+        color: #ef4444;
+    }
+}
+
+.animate-urgent {
+    animation: pulse-red 1s infinite;
+}
