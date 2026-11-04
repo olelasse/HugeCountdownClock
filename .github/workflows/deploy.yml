@@ -1,0 +1,27 @@
+name: Deploy Website to cPanel
+
+on:
+  push:
+    branches:
+      - main  # Triggers the deployment only when you push to the main branch
+
+jobs:
+  web-deploy:
+    name: Deploy Files
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get latest code
+      uses: actions/checkout@v4
+
+    # Optional: If you need to build a React/Vue/Node app, uncomment the next two lines:
+    # - name: Install dependencies & Build
+    #   run: npm install && npm run build
+
+    - name: Sync Files via FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        server-dir: ${{ secrets.FTP_SERVER_DIR }}  # Change this if your target directory is different
