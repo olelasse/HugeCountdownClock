@@ -45,10 +45,8 @@ Ideal for presentations, stage countdowns, focus/Pomodoro sessions, workout inte
 
 1. Clone or download the repository:
 
-```bash
-git clone [github.com/olelasse/HugeCountdownClock.git](https://github.com/olelasse/HugeCountdownClock.git)
-cd HugeCountdownClock
-```
+<pre><code>git clone <a href="https://github.com/olelasse/HugeCountdownClock.git">https://github.com/olelasse/HugeCountdownClock.git</a>
+cd HugeCountdownClock</code></pre>
 
 2. Open `index.html` in any modern web browser.
 3. No build tools, package managers, or local web servers are required!
