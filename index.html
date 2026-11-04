@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huge Countdown Clock</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="h-full flex flex-col justify-between items-center relative m-0 p-3 sm:p-6 overflow-hidden">
+
+    <!-- Top Action Bar (Fullscreen & Settings Toggles) -->
+    <header id="top-bar" class="w-full flex justify-between items-center z-20 opacity-90 transition-opacity duration-300">
+        <div class="flex items-center space-x-2">
+            <span id="status-badge" class="px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase bg-zinc-800 text-zinc-400 border border-zinc-700">Ready</span>
+        </div>
+        <div class="flex items-center space-x-3">
+            <!-- Fullscreen Button -->
+            <button id="fullscreen-btn" title="Toggle Fullscreen (F)" class="p-2.5 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition shadow-lg focus:outline-none focus:ring-2 focus:ring-zinc-500">
+                <svg id="fs-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                </svg>
+            </button>
+            <!-- Toggle Controls Button -->
+            <button id="toggle-drawer-btn" title="Toggle Settings (C)" class="flex items-center space-x-2 px-4 py-2 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition shadow-lg focus:outline-none focus:ring-2 focus:ring-zinc-500 font-medium text-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <span id="drawer-btn-text">Controls</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Countdown Display -->
+    <main class="flex-grow flex flex-col justify-center items-center w-full my-auto z-10 cursor-pointer py-2" id="screen-click-area" title="Click anywhere to Start/Pause">
+        <div id="clock-container" class="text-center w-full flex flex-col items-center justify-center">
+            <h1 id="clock-display" class="tabular-nums font-black tracking-tighter text-white drop-shadow-2xl select-none">
+                05:00
+            </h1>
+            <p id="sub-label" class="text-zinc-500 font-light mt-2 tracking-widest uppercase text-xs sm:text-sm">Remaining Time</p>
+        </div>
+    </main>
+
+    <!-- Footer / Keyboard Shortcut Hint -->
+    <footer id="footer" class="w-full text-center z-10 text-zinc-600 text-xs tracking-wider pb-1 transition-opacity duration-300">
+        <span id="hint-text">Press <kbd class="px-1.5 py-0.5 bg-zinc-900 border border-zinc-800 rounded text-zinc-400">Space</kbd> to pause/start • Click screen to toggle</span>
+    </footer>
+
+    <!-- Slide-in Control Panel / Modal Drawer -->
+    <div id="control-drawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-zinc-950/95 backdrop-blur-xl border-l border-zinc-800 p-6 shadow-2xl z-30 transform translate-x-full drawer-transition flex flex-col justify-between">
+        <div>
+            <!-- Drawer Header -->
+            <div class="flex justify-between items-center pb-6 border-b border-zinc-800">
+                <h2 class="text-lg font-bold text-white tracking-wide">Timer Controls</h2>
+                <button id="close-drawer-btn" class="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Time Input Form -->
+            <div class="mt-6 space-y-5">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Set Duration</label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <span class="text-[10px] text-zinc-500 uppercase block mb-1">Hours</span>
+                            <input type="number" id="input-hours" min="0" max="99" value="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2.5 text-white font-bold text-center focus:outline-none focus:border-zinc-500 text-lg">
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-zinc-500 uppercase block mb-1">Minutes</span>
+                            <input type="number" id="input-minutes" min="0" max="59" value="5" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2.5 text-white font-bold text-center focus:outline-none focus:border-zinc-500 text-lg">
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-zinc-500 uppercase block mb-1">Seconds</span>
+                            <input type="number" id="input-seconds" min="0" max="59" value="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2.5 text-white font-bold text-center focus:outline-none focus:border-zinc-500 text-lg">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Presets -->
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Quick Presets</label>
+                    <div class="grid grid-cols-4 gap-2">
+                        <button type="button" class="preset-btn py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-lg text-xs font-medium text-zinc-300 transition" data-h="0" data-m="1" data-s="0">1m</button>
+                        <button type="button" class="preset-btn py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-lg text-xs font-medium text-zinc-300 transition" data-h="0" data-m="5" data-s="0">5m</button>
+                        <button type="button" class="preset-btn py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-lg text-xs font-medium text-zinc-300 transition" data-h="0" data-m="15" data-s="0">15m</button>
+                        <button type="button" class="preset-btn py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-lg text-xs font-medium text-zinc-300 transition" data-h="1" data-m="0" data-s="0">1h</button>
+                    </div>
+                </div>
+
+                <button id="apply-time-btn" class="w-full py-3 bg-white hover:bg-zinc-200 text-black font-semibold rounded-xl transition shadow-lg text-sm">
+                    Apply Time & Reset
+                </button>
+            </div>
+
+            <!-- Primary Playback Actions -->
+            <div class="mt-8 pt-6 border-t border-zinc-800 space-y-3">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Playback</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="start-pause-btn" class="py-3 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-white font-semibold rounded-xl transition text-sm flex items-center justify-center space-x-2">
+                        <span id="start-pause-icon">▶</span>
+                        <span id="start-pause-text">Start</span>
+                    </button>
+                    <button id="reset-btn" class="py-3 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white font-semibold rounded-xl transition text-sm">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drawer Footer / Audio Settings -->
+        <div class="pt-6 border-t border-zinc-800 flex items-center justify-between">
+            <span class="text-xs text-zinc-400">Sound Effects (Web Audio)</span>
+            <button id="sound-toggle-btn" class="px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-xs font-medium text-white transition">Enabled</button>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast-box" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-zinc-900 border border-zinc-700 text-white px-6 py-3 rounded-2xl shadow-2xl z-50 opacity-0 pointer-events-none transition-all duration-300 flex items-center space-x-3">
+        <span id="toast-icon" class="text-emerald-400 font-bold">●</span>
+        <span id="toast-message" class="text-sm font-medium">Notification</span>
+    </div>
+
+    <!-- Application Script -->
+    <script src="script.js"></script>
+</body>
+</html>
