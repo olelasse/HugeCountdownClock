@@ -35,10 +35,10 @@ Ideal for presentations, stage countdowns, focus/Pomodoro sessions, workout inte
 
 ```text
 ├── LICENSE           # MIT License
+├── README.md         # Project documentation
 ├── index.html        # App markup and Tailwind layout
 ├── style.css         # Typography clamp rules, animations, and dark styling
-├── script.js         # Countdown logic and Web Audio synthesis
-└── README.md         # Project documentation
+└── script.js         # Countdown logic and Web Audio synthesis
 ```
 
 ## 🚀 Getting Started
@@ -46,8 +46,8 @@ Ideal for presentations, stage countdowns, focus/Pomodoro sessions, workout inte
 1. Clone or download the repository:
 
 ```bash
-git clone [https://github.com/your-username/huge-countdown-clock.git](https://github.com/your-username/huge-countdown-clock.git)
-cd huge-countdown-clock
+git clone [github.com/olelasse/HugeCountdownClock.git](https://github.com/olelasse/HugeCountdownClock.git)
+cd HugeCountdownClock
 ```
 
 2. Open `index.html` in any modern web browser.
